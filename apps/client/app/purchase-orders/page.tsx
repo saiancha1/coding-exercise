@@ -18,7 +18,7 @@ export default  function Index() {
       try {
         const response = await fetch('http://localhost:3100/api/purchase-orders');
         if(!response.ok) {
-          setError('Failed to fetch data');
+          setError('Purchase orders not found');
           return;
         }
       const dtos = await response.json();

@@ -8,7 +8,23 @@ interface PurchaseOrderTableProps {
     purchaseOrders: PurchaseOrder[];
     handleRowClick: (orderId: number) => void;
   }
-
+  function getDeliveryDateColor(expectedDeliveryDate:Date | undefined) {
+    if (!expectedDeliveryDate) {
+      return '';
+    }
+    const currentDate = new Date();
+    const deliveryDate = new Date(expectedDeliveryDate);
+    const diffDays = ((deliveryDate as any) - (currentDate as any)) / (1000 * 3600 * 24); // Difference in days
+  
+    if (diffDays > 0) {
+      return 'lightgreen'; // Future delivery date
+    } else if (diffDays >= -7) {
+      return 'orange'; // Within the last 7 days
+    } else {
+      return 'red'; // Older than 7 days
+    }
+  }
+  
   const PurchaseOrderList = ({  purchaseOrders, handleRowClick } : PurchaseOrderTableProps)  => {
     const [filteredOrders, setFilteredOrders] = useState<PurchaseOrder[]>([]);
     const [searchTerm, setSearchTerm] = useState('');
@@ -85,7 +101,9 @@ interface PurchaseOrderTableProps {
                   </TableCell>
                   <TableCell>{purchaseOrder.vendorName}</TableCell>
                   <TableCell>{purchaseOrder.orderDate?.toLocaleDateString()}</TableCell>
-                  <TableCell>{purchaseOrder.expectedDeliveryDate?.toLocaleDateString()}</TableCell>
+                  <TableCell style={{ backgroundColor: getDeliveryDateColor(purchaseOrder.expectedDeliveryDate) }}>
+                    {purchaseOrder.expectedDeliveryDate?.toLocaleDateString()}
+                  </TableCell>
                   <TableCell>
                     <ul>
                       {purchaseOrder.items.map((item) => (
