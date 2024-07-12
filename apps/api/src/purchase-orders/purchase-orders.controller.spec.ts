@@ -27,7 +27,7 @@ describe('PurchaseOrdersController', () => {
 
   describe('findAll', () => {
     it('should return an array of purchase orders', async () => {
-      const result = [
+      const expectedResult = [
         {
             id: 1, 
             vendor_name: 'Example Vendor', 
@@ -45,8 +45,8 @@ describe('PurchaseOrdersController', () => {
             updated_at: new Date() 
           }
       ];
-      jest.spyOn(service, 'findAll').mockImplementation(async () => result);
-      expect(await controller.findAll()).toBe(result);
+      jest.spyOn(service, 'findAll').mockImplementation(async () => expectedResult);
+      expect(await controller.findAll()).toBe(expectedResult);
     });
 
     it('should throw an exception if an error occurs', async () => {
@@ -57,7 +57,7 @@ describe('PurchaseOrdersController', () => {
 
   describe('findById', () => {
     it('should return a purchase order if found', async () => {
-        const result = {
+        const expectedResult = {
             id: 1, 
             vendor_name: 'Example Vendor', 
             order_date: new Date(), 
@@ -65,14 +65,12 @@ describe('PurchaseOrdersController', () => {
             created_at: new Date(),
             updated_at: new Date() 
           };
-      jest.spyOn(service, 'findById').mockImplementation(async () => result);
-      expect(await controller.findById('1')).toBe(result);
+      jest.spyOn(service, 'findById').mockImplementation(async () => expectedResult);
+      expect(await controller.findById('1')).toBe(expectedResult);
     });
 
     it('should throw an exception if orderId is invalid', async () => {
       await expect(controller.findById('invalid')).rejects.toThrow(new HttpException('Invalid order ID', HttpStatus.BAD_REQUEST));
     });
-
-    // Additional tests for other scenarios can be added here
   });
 });
