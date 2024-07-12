@@ -19,7 +19,6 @@ export default  function Index() {
 
     const params = useParams();
     const {purchaseOrderId} = params;
-    console.log(purchaseOrderId);
     const [purchaseOrder, setPurchaseOrder] = useState<PurchaseOrder | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');

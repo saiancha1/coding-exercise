@@ -15,18 +15,24 @@ interface PurchaseOrderTableProps {
     const [orderDate, setOrderDate] = useState<string | null>(null);
     const [expectedDeliveryDate, setExpectedDeliveryDate] = useState<string | null>(null);
     useEffect(() => {
-        const parsedSearchTerm = Number(searchTerm);
-        console.log('triggered search ' + expectedDeliveryDate)
-        const filtered = purchaseOrders.filter(order => {
-          const matchesOrderDate = orderDate ? order.orderDate?.toLocaleDateString() === orderDate : true;
-          const matchesExpectedDeliveryDate = expectedDeliveryDate ? order.expectedDeliveryDate?.toLocaleDateString() === expectedDeliveryDate : true;
-          const containsItem = !isNaN(parsedSearchTerm) ? order.items.some(item => item.itemId === parsedSearchTerm) : true;
-          console.log('triggered search ' + order.orderId + matchesOrderDate || matchesExpectedDeliveryDate || containsItem);
+
+      let filtered = [...purchaseOrders];
+      console.log(orderDate);
+      if (orderDate) {
+        filtered = filtered.filter(order => order.orderDate?.toLocaleDateString() === orderDate);
+      }
     
-          return matchesOrderDate || matchesExpectedDeliveryDate || containsItem;
-        });
-        setFilteredOrders(filtered);
-      }, [searchTerm, orderDate, expectedDeliveryDate, purchaseOrders]);
+      if (expectedDeliveryDate) {
+        filtered = filtered.filter(order => order.expectedDeliveryDate?.toLocaleDateString() === expectedDeliveryDate);
+      }
+    
+      const parsedSearchTerm = Number(searchTerm);
+      if (!isNaN(parsedSearchTerm) && parsedSearchTerm > 0) {
+        filtered = filtered.filter(order => order.items.some(item => item.itemId === parsedSearchTerm));
+      }
+    
+      setFilteredOrders(filtered);
+    }, [searchTerm, orderDate, expectedDeliveryDate, purchaseOrders]);
     return (
         <>
         <Typography variant="h4" gutterBottom>
