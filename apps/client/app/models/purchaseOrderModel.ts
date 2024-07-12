@@ -1,3 +1,4 @@
+// Defines the structure for a Purchase Order Data Transfer Object (DTO) as received from the API.
 export interface PurchaseOrderDTO {
     id: number;
     vendor_name: string;
@@ -8,6 +9,7 @@ export interface PurchaseOrderDTO {
     purchase_order_line_items: PurchaseOrderItemDTO[];
 }
 
+// Represents the internal model of a Purchase Order within the application.
 export interface PurchaseOrder {
     orderId: number;
     vendorName: string;
@@ -18,6 +20,7 @@ export interface PurchaseOrder {
     items: PurchaseOrderItem[];
 }
 
+// Defines the structure for a Purchase Order Item Data Transfer Object (DTO) as received from the API.
 export interface PurchaseOrderItemDTO {
     id: number;
     purchase_order_id: number;
@@ -27,6 +30,8 @@ export interface PurchaseOrderItemDTO {
     created_at: Date;
     updated_at: Date;
 }
+
+// Represents the internal model of a Purchase Order Item within the application.
 export interface PurchaseOrderItem {
     purchaseOrderLineId: number;
     purchaseOrderId: number;
@@ -37,6 +42,7 @@ export interface PurchaseOrderItem {
     updatedDate: Date | null;
 }
 
+// Converts a PurchaseOrderDTO to a PurchaseOrder model, including conversion of all associated line items.
 export function mapPurchaseOrderDTOToPurchaseOrder(purchaseOrder: PurchaseOrderDTO): PurchaseOrder {
     return {
         orderId: purchaseOrder.id,
@@ -49,6 +55,7 @@ export function mapPurchaseOrderDTOToPurchaseOrder(purchaseOrder: PurchaseOrderD
     };
 }
 
+// Converts a PurchaseOrderItemDTO to a PurchaseOrderItem model.
 export function mapPurchaseOrderItemDTOToPurchaseOrderItem(purchaseOrderItem: PurchaseOrderItemDTO): PurchaseOrderItem {
     return {
         purchaseOrderLineId: purchaseOrderItem.id,
