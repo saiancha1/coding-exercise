@@ -8,13 +8,14 @@ interface PurchaseOrderTableProps {
     purchaseOrders: PurchaseOrder[];
     handleRowClick: (orderId: number) => void;
   }
-  function getDeliveryDateColor(expectedDeliveryDate:Date | undefined) {
+  function getDeliveryDateColor(expectedDeliveryDate:Date | null) {
     if (!expectedDeliveryDate) {
       return '';
     }
     const currentDate = new Date();
     const deliveryDate = new Date(expectedDeliveryDate);
-    const diffDays = ((deliveryDate as any) - (currentDate as any)) / (1000 * 3600 * 24); // Difference in days
+    // Difference in days
+    const diffDays = ((deliveryDate as any) - (currentDate as any)) / (1000 * 3600 * 24); 
   
     if (diffDays > 0) {
       return 'lightgreen'; // Future delivery date
