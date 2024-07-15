@@ -41,7 +41,7 @@ CREATE TABLE purchase_orders
   `updated_at`             TIMESTAMP NULL
 );
 INSERT INTO purchase_orders (`vendor_name`, `order_date`, `expected_delivery_date`)
-VALUES ('Levis', '2023-01-01 12:00:00', '2023-03-10 12:00:00'),
+VALUES ('Levis', '2024-07-13 12:00:00', '2023-03-10 12:00:00'),
        ('Bonobos', '2023-02-01 12:00:00', '2023-04-10 12:00:00'),
        ('Scotch and Soda', '2023-03-01 12:00:00', '2023-05-10 12:00:00');
 

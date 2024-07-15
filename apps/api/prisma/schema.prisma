@@ -17,6 +17,8 @@ model Item {
   quantity       Int
   created_at     DateTime?
   updated_at     DateTime?
+  stockSummaries  StockSummary[] 
+
 
   @@map("items")
 }
@@ -56,4 +58,13 @@ model PurchaseOrders {
   purchase_order_line_items PurchaseOrderLineItems[]
 
   @@map("purchase_orders")
+}
+model StockSummary {
+  id              Int    @id @default(autoincrement())
+  itemId          Int
+  SOH             Int
+  stockAvailable  Int
+  item            Item   @relation(fields: [itemId], references: [id])
+
+  @@map("stock_summary")
 }
