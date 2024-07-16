@@ -43,50 +43,44 @@ export default function Index() {
       .catch(error => console.error('Error fetching items:', error));
   }, [products]);
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (!branch) {
-      setError('Branch is required');
-      return;
+  async function createOrder(payload:any) {
+    const response = await fetch('http://localhost:3100/api/adjustments', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+  
+    if (!response.ok) {
+
+      throw new Error(`Failed to create adjustment`);
     }
-    const payload = {
-      "branch_id": branch,
-      "adjustment_line_items": {
-        "create": items.map(item => ({
-          "item_id": item.product?.id,
-          "quantity": Number(item.quantity),
-          "cost": Number(item.cost)
-        }))
-      }
-    };
   
+    return response.json();
+  }
+  
+  const handleSubmit = async () => {
     try {
-      const response = await fetch('http://localhost:3100/api/adjustments', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
-  
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-  
-      const data = await response.json();
+      const payload = {
+        "branch_id": branch,
+        "adjustment_line_items": {
+          "create": items.map(item => ({
+            "item_id": item.product?.id,
+            "quantity": Number(item.quantity),
+            "cost": Number(item.cost)
+          }))
+        }
+      };
+      const data = await createOrder(payload);
       setResult(`Order created with ID: ${data.id}`);
-    } catch (error) {
-      setError('An error has occurred. Order not created.');
+    } catch (error:any) {
+      setError(`An error has occurred. Order not created. ${error.message}`);
     }
   };
-
+  
   const handleItemChange = (index: number, field: keyof typeof items[0], value: string) => {
-    const newItems: LineItem[] = [...items];
-    newItems[index] = {
-      ...newItems[index],
-      [field]: value,
-    };
-    setItems(newItems);
+    setItems(items.map((item, i) => i === index ? { ...item, [field]: value } : item));
   };
 
   const addItem = () => {
