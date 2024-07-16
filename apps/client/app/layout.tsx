@@ -19,7 +19,8 @@ export default function RootLayout({
         <Link href="/purchase-orders" className="btn btn-ghost normal-case text-xl">Purchase Orders</Link>
         <Link href="/parent-items" className="btn btn-ghost normal-case text-xl">Item Catalog</Link>
         <Link href="/stock-summary" className="btn btn-ghost normal-case text-xl">Stock Summary</Link>
-   
+        <Link href="/adjustments" className="btn btn-ghost normal-case text-xl">Adjustments</Link>
+
       </div>
       <div className="mx-6">
         {children}
