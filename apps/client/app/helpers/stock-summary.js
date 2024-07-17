@@ -4,7 +4,7 @@ export const fetchStockItems = async () => {
     return data;
   };
   export function accumulateStockItems(stockItems) {
-    return stockItems.reduce((acc, item) => {
+    const stockItemsArray = stockItems.reduce((acc, item) => {
         if (acc.has(item.itemId)) {
           const existingItem = acc.get(item.itemId);
           acc.set(item.itemId, { ...item, SOH: existingItem.SOH + item.SOH });
@@ -13,4 +13,7 @@ export const fetchStockItems = async () => {
         }
         return acc;
       }, new Map());
+      
+      const result = Array.from(stockItemsArray.values());
+      return result;
   }

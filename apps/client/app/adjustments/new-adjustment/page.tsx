@@ -2,7 +2,8 @@
 import { useState, useEffect } from 'react';
 import { Button, TextField, Typography, Container, FormControl, InputLabel, MenuItem, Select, TableContainer, Table, TableBody, TableRow, TableCell, TableHead, Paper, Autocomplete, Alert, Stack } from '@mui/material';
 import { v4 as uuidv4 } from 'uuid';
-
+import { ApiService } from '../../services/ApiService';
+import { AdjustmentService } from '../../services/AdjustmentService';
 export default function Index() {
   const [branch, setBranch] = useState('');
   const [items, setItems] = useState<LineItem[]>([]);
@@ -30,35 +31,19 @@ export default function Index() {
   
 
   useEffect(() => {
-    fetch('http://localhost:3100/api/branches')
-      .then(response => response.json())
+    ApiService.fetchBranches()
       .then(data => setBranches(data))
       .catch(error => console.error('Error fetching branches:', error));
 
-      fetch('http://localhost:3100/api/parent-items')
-      .then(response => response.json())
+    ApiService.fetchParentItems()
       .then(data => {
-        const childItems = data.flatMap((item:any) => item.items);
-        setProducts(childItems);})
+        const childItems = data.flatMap((item: any) => item.items);
+        setProducts(childItems);
+      })
       .catch(error => console.error('Error fetching items:', error));
   }, [products]);
 
-  async function createOrder(payload:any) {
-    const response = await fetch('http://localhost:3100/api/adjustments', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
-    });
-  
-    if (!response.ok) {
 
-      throw new Error(`Failed to create adjustment`);
-    }
-  
-    return response.json();
-  }
   
   const handleSubmit = async () => {
     try {
@@ -72,7 +57,7 @@ export default function Index() {
           }))
         }
       };
-      const data = await createOrder(payload);
+      const data = await AdjustmentService.createAdjustment(payload);
       setResult(`Order created with ID: ${data.id}`);
     } catch (error:any) {
       setError(`An error has occurred. Order not created. ${error.message}`);

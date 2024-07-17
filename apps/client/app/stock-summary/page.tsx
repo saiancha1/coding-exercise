@@ -34,10 +34,7 @@ export default  function Index()  {
   const handleSOHClick = (stock: StockItem) => {
     setSelectedStock(stock);
   };
-  const accumulatedStockItemsMap = accumulateStockItems(stockItems);
-
-  const uniqueStockItems = Array.from(accumulatedStockItemsMap.values());
-
+  const uniqueStockItems = accumulateStockItems(stockItems);
   return (
     <>
     <TableContainer component={Paper}>
@@ -50,7 +47,7 @@ export default  function Index()  {
           </TableRow>
         </TableHead>
         <TableBody>
-          {uniqueStockItems.map((stock) => (
+          {uniqueStockItems.map((stock: StockItem) => (
             <TableRow
               key={stock.id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
