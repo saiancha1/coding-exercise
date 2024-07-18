@@ -21,7 +21,7 @@ export class AdjustmentController {
     }
 
     @Post()
-    createAdjustment(@Body() createAdjustmentDto: Adjustment):  Promise<{ id: number }> {
+    createAdjustment(@Body() createAdjustmentDto: any):  Promise<{ id: number }> {
         return this.adjustmentService.createAdjustment(createAdjustmentDto);
     }
 }

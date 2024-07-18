@@ -6,14 +6,13 @@ export class BranchController  {
     constructor(private branchService: BranchService) {
     }
       
-
     @Get()
     async getBranches() {
         try {
             const branches = await this.branchService.getBranches();
             return branches;
         } catch (error) {
-            // Handle error
+            throw new Error('Failed to fetch branches');
         }
     }
 }
