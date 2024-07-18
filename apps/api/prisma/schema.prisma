@@ -17,6 +17,8 @@ model Item {
   quantity       Int
   created_at     DateTime?
   updated_at     DateTime?
+  stockSummaries  StockSummary[] 
+  stock_movements Stock_Movement[] // Add this line
 
   @@map("items")
 }
@@ -57,3 +59,57 @@ model PurchaseOrders {
 
   @@map("purchase_orders")
 }
+model StockSummary {
+  id              Int    @id @default(autoincrement())
+  itemId          Int
+  SOH             Int
+  stockAvailable  Int
+  item            Item   @relation(fields: [itemId], references: [id])
+  branch_id       Int
+
+  @@unique([itemId, branch_id])
+  @@map("stock_summary")
+}
+model Branch {
+  id              Int    @id @default(autoincrement())
+  name            String
+  stock_movements Stock_Movement[] // Add this line
+  @@map("Branches")
+}
+model AdjustmentLineItems {
+  id              Int        @id @default(autoincrement())
+  adjustment      Adjustment @relation(fields: [adjustment_id], references: [id])
+  adjustment_id   Int
+  item_id         Int
+  quantity        Int
+  cost            Decimal
+  created_at      DateTime? @default(now())
+
+  @@map("Adjustment_Lines")
+}
+model Adjustment {
+  id              Int    @id @default(autoincrement())
+  created_at      DateTime? @default(now())
+  branch_id       Int
+  adjustment_line_items AdjustmentLineItems[]
+  stock_movements Stock_Movement[] 
+  @@map("Adjustments")
+}
+model Stock_Movement {
+  id                    Int       @id @default(autoincrement())
+  Direction             Int       
+  TransactionType       String    
+  ItemID                Int       
+  Quantity              Int      
+  Branch_Id             Int      
+  Applied_Transaction_Id Int      
+  created_at            DateTime? @default(now())
+
+  // Relations
+  item                  Item      @relation(fields: [ItemID], references: [id])
+  branch                Branch    @relation(fields: [Branch_Id], references: [id])
+  adjustment            Adjustment @relation(fields: [Applied_Transaction_Id], references: [id])
+
+  @@map("Stock_Movements")
+}
+
