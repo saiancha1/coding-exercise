@@ -4,6 +4,7 @@ import {useRouter} from "next/navigation";
 import { Adjustment } from "../models/AdjustmentModel"; 
 import CurrencyFormat from "../components/CurrencyFormat";
 import { useState, useEffect } from "react";
+import { AdjustmentService } from "../services/AdjustmentService";
 export default  function Index() {
   const [adjustments, setAdjustments] = useState<Adjustment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -11,24 +12,10 @@ export default  function Index() {
   const router = useRouter();
 
   useEffect(() => {
-    async function fetchPurchaseOrders() {
-      try {
-        const response = await fetch('http://localhost:3100/api/adjustments');
-        if(!response.ok) {
-          setError('Adjustments not found');
-          return;
-        }
-      const data = await response.json();
-      setAdjustments(data);
-    } 
-    catch (error) {
-      setError('Failed to fetch Adjustments');
-    }
-    finally {
-      setIsLoading(false); 
-    }
-  }
-    fetchPurchaseOrders();
+    AdjustmentService.fetchAdjustments()
+      .then(data => setAdjustments(data))
+      .catch(error => console.error('Error fetching adjustments:', error))
+      .finally(() => setIsLoading(false));
   }, []);
 
 

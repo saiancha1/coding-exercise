@@ -16,4 +16,10 @@ export class AdjustmentService {
 
     return response.json();
   }
+
+  static async fetchAdjustments() {
+    const response = await fetch(`${ApiService.baseUrl}/adjustments`);
+    if (!response.ok) throw new Error('Error fetching adjustments');
+    return response.json();
+  }
 }
